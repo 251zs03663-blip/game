@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<body style="background: #222; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
+    <canvas id="canvas" width="400" height="500" style="background: white; border: 5px solid #000;"></canvas>
+    <script>
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        let playerX = 180;
+        let enemyY = 0;
+        let enemyX = Math.random() * 350;
+        let score = 0;
+
+        function update() {
+            // 敵の移動
+            enemyY += 5 + (score / 10);
+            if (enemyY > 500) {
+                enemyY = 0;
+                enemyX = Math.random() * 350;
+                score++;
+            }
+
+            // 当たり判定
+            if (enemyY > 450 && enemyX > playerX - 40 && enemyX < playerX + 40) {
+                alert("ゲームオーバー！ スコア: " + score);
+                score = 0;
+                enemyY = 0;
+            }
+
+            // 描画
+            ctx.clearRect(0, 0, 400, 500);
+            ctx.fillStyle = "blue"; // 自機
+            ctx.fillRect(playerX, 450, 40, 40);
+            ctx.fillStyle = "red"; // 敵
+            ctx.fillRect(enemyX, enemyY, 40, 40);
+            
+            requestAnimationFrame(update);
+        }
+
+        window.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowLeft" && playerX > 0) playerX -= 20;
+            if (e.key === "ArrowRight" && playerX < 360) playerX += 20;
+        });
+
+        update();
+    </script>
+</body>
+</html>
